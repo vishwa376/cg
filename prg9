@@ -1,0 +1,53 @@
+Read an image and extract and display low-level features such as edges, textures using filtering techniques
+
+import cv2
+import numpy as np
+
+# Read the image
+image_path = "art-1.png"  # Replace "art-1.png" with the path to your image
+image = cv2.imread(image_path)
+
+if image is None:
+    print("Failed to load the image.")
+else:
+    # Display the original image
+    cv2.imshow("Original Image", image)
+
+    # Apply blur to the image
+    blur_kernel_size = (5, 5)  # Kernel size for blur filter
+    blurred_image = cv2.blur(image, blur_kernel_size)
+    cv2.imshow("Blurred Image", blurred_image)
+
+    # Apply Gaussian blur to the image
+    gaussian_blur_kernel_size = (5, 5)  # Kernel size for Gaussian blur filter
+    gaussian_blurred_image = cv2.GaussianBlur(image, gaussian_blur_kernel_size, 0)
+    cv2.imshow("Gaussian Blurred Image", gaussian_blurred_image)
+
+    # Apply median blur to the image
+    median_blur_kernel_size = 5  # Kernel size for median blur filter (should be odd)
+    median_blurred_image = cv2.medianBlur(image, median_blur_kernel_size)
+    cv2.imshow("Median Blurred Image", median_blurred_image)
+
+    # Convert image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply Canny edge detection
+    low_threshold = 50
+    high_threshold = 150
+    edges = cv2.Canny(gray_image, low_threshold, high_threshold)
+    cv2.imshow("Edges", edges)
+
+    # Apply Laplacian edge detection
+    laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
+    laplacian = cv2.convertScaleAbs(laplacian)
+    cv2.imshow("Laplacian Edges", laplacian)
+
+    # Apply Sobel edge detection
+    sobel_x = cv2.Sobel(gray_image, cv2.CV_64F, 1, 0, ksize=5)
+    sobel_y = cv2.Sobel(gray_image, cv2.CV_64F, 0, 1, ksize=5)
+    sobel_edges = cv2.magnitude(sobel_x, sobel_y)
+    sobel_edges = cv2.convertScaleAbs(sobel_edges)
+    cv2.imshow("Sobel Edges", sobel_edges)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
